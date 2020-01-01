@@ -54,16 +54,11 @@ if (APIVALUE !== 'foo'){
         <input type="text" id="screensLinks" value="" class="field" placeholder="Screenshot Links" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Screenshot Links'">                     \
         <input type="text" id="ytLink" value="" class="field" placeholder="Youtube Trailer Link" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Youtube Trailer Link'">                   \
         <input type="text" id="ddl" value="" class="field" placeholder="Download Link" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Download Link'">                                    \
-        <textarea rows="1" style="width:100%;" class="field" name="message" id="medianInfo" placeholder="Mediainfo" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Mediainfo'"></textarea>\
+        <textarea rows="1" style="width:100%;" class="field" name="mi" id="medianInfo" placeholder="Mediainfo" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Mediainfo'"></textarea>\
         <span>DownCloud</span>                                                                                                                           \
         <label class="switch">                                                                                                                           \
         <input type="checkbox"  id="Downcloud" value="Downcloud" checked></input>                                                                        \
-        <span class="slider round"></span></label>&nbsp;                                                                                                 \
-        <span>HideReact</span>                                                                                                                           \
-        <label class="switch">                                                                                                                           \
-        <input type="checkbox" id="HideReact" value="HideReact" checked></input>                                                                         \
-        <span class="slider round"></span>                                                                                                               \
-        </label><br><br>                                                                                                                                 \
+        <span class="slider round"></span></label>&nbsp;<br></br>                                                                                        \
         <input type="number" id="HideReactScore" min="0" max="100" value="0"> HideReactScore                                                             \
         <input type="number" id="HidePosts" min="0" max="50" value="0"> HidePosts<br>                                                                    \
         <p id="myNumberSum">&nbsp;</p>                                                                                                                   \
@@ -117,9 +112,7 @@ $("#gmAddNumsBtn").click ( function () {
     if (Downcloud.checked){
         ddl = '[DOWNCLOUD]' + ddl + '[/DOWNCLOUD]'
     }
-    if (HideReact.checked){
-        ddl = '[HIDEREACT=1,2,3,4,5,6]' + ddl + '[/HIDEREACT]'
-    }
+    ddl = '[HIDEREACT=1,2,3,4,5,6]' + ddl + '[/HIDEREACT]'
     if (hidereactscore !== "0"){
         ddl = `[HIDEREACTSCORE=${hidereactscore}]` + ddl + '[/HIDEREACTSCORE]'
     }
@@ -184,6 +177,9 @@ var json = JSON.parse(response.responseText);
 [center]${ddl}[/center]`;
     GM_setClipboard (dump);
     $(`#myNumberSum`).text (`Copied to clipboard! Just paste on Blackpearl.biz`);
+    post_text = document.querySelector("#top > div.p-body > div > div.uix_contentWrapper > div > div > div > form > div > div:nth-child(1) > div.js-inlineNewPostFields > dl.formRow.formRow--input.formRow--fullWidth.formRow--noLabel.formRow--mergePrev > dd > div.fr-box.bbWrapper.fr-ltr.fr-basic.fr-top > textarea");
+    post_text.value = dump;
+    document.querySelector("#title").value = `${title} (${year})`;
 }})});;})
 
 $("#gmCloseDlgBtn").click ( function () {
