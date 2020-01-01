@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Blackpearl IMDB
-// @version     2.0.1
+// @version     2.1.0
 // @description Template Maker
 // @author      NotLaxudope
 // @include     https://blackpearl.biz/forums/129/post-thread
@@ -176,10 +176,9 @@ var json = JSON.parse(response.responseText);
 [hr][/hr][center][size=6][color=rgb(250, 197, 28)][b]Download Link[/b][/color][/size][/center]\n
 [center]${ddl}[/center]`;
     GM_setClipboard (dump);
-    $(`#myNumberSum`).text (`Copied to clipboard! Just paste on Blackpearl.biz`);
-    post_text = document.querySelector("#top > div.p-body > div > div.uix_contentWrapper > div > div > div > form > div > div:nth-child(1) > div.js-inlineNewPostFields > dl.formRow.formRow--input.formRow--fullWidth.formRow--noLabel.formRow--mergePrev > dd > div.fr-box.bbWrapper.fr-ltr.fr-basic.fr-top > textarea");
-    post_text.value = dump;
-    document.querySelector("#title").value = `${title} (${year})`;
+    $(`#myNumberSum`).text (`Copied! Just paste on Blackpearl.biz`);
+    document.getElementsByName("message")[0].value = dump;
+    document.getElementById("title").value = `${title} (${year})`;
 }})});;})
 
 $("#gmCloseDlgBtn").click ( function () {
