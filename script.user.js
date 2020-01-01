@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Blackpearl IMDB
-// @version     2.1.0
+// @version     2.1.1
 // @description Template Maker
 // @author      NotLaxudope
 // @include     https://blackpearl.biz/forums/129/post-thread
@@ -173,12 +173,16 @@ var json = JSON.parse(response.responseText);
 [*][B]Production: [/B] ${production} [/LIST]
 [hr][/hr][indent][size=6][color=rgb(250, 197, 28)][b]Media Info[/b][/color][/size][/indent]\n
 [spoiler='Click here to view Media Info']\n ${MEDIAINFO} \n[/spoiler]
-[hr][/hr][center][size=6][color=rgb(250, 197, 28)][b]Download Link[/b][/color][/size][/center]\n
-[center]${ddl}[/center]`;
-    GM_setClipboard (dump);
-    $(`#myNumberSum`).text (`Copied! Just paste on Blackpearl.biz`);
-    document.getElementsByName("message")[0].value = dump;
-    document.getElementById("title").value = `${title} (${year})`;
+[hr][/hr][center][size=6][color=rgb(250, 197, 28)][b]Download Link[/b][/color][/size]\n
+${ddl}[/center]`;
+    if (!title){
+        alert("You Didn't Select A Title or Enter a IMDB ID!");
+    } else {
+        GM_setClipboard (dump);
+        $(`#myNumberSum`).text (`Copied! Just paste on Blackpearl.biz`);
+        document.getElementsByName("message")[0].value = dump;
+        document.getElementById("title").value = `${title} (${year})`;
+    }
 }})});;})
 
 $("#gmCloseDlgBtn").click ( function () {
