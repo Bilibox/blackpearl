@@ -200,6 +200,10 @@ GM.getValue("APIKEY", "foo").then(value => {
     });
 });
 
+$("#gmCloseDlgBtn").click ( function () {
+    $("#gmPopupContainer").hide ();
+});
+
 //--- CSS styles make it work...
 GM_addStyle ( "                                                   \
     @media screen and (min-width: 300px) {                        \
