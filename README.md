@@ -20,6 +20,7 @@ First you'll want to navigate to the one of the Movie or TV Show sections and st
 
 ### 2.
 There are two ways of using the IMDB field. You can start typing the name of the Movie or Show and this will present you with a list to choose from. Simply click the correct one and move to the next step. If you are having trouble finding the movie you want I recommend using the IMDB ID method below.
+
 The other method is using the IMDB ID. This starts with "tt" and has numbers after it. For example Avengers: Endgame (2019) https://www.imdb.com/title/tt4154796/ the IMDB ID would be tt4154796. So I would enter tt4154796 into the field and go to the next step.
 
 

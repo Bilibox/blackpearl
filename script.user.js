@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Blackpearl IMDB
-// @version     2.1.1
+// @version     2.1.2
 // @description Template Maker
 // @author      NotLaxudope
 // @include     https://blackpearl.biz/forums/129/post-thread
@@ -43,121 +43,135 @@
 
 GM.getValue("APIKEY", "foo").then(value => { const APIVALUE = value
 if (APIVALUE !== 'foo'){
-   $("body").append ( `                                                                                                                                  \
-    <div id="gmPopupContainer">                                                                                                                          \
-    <form> <!-- For true form use method="POST" action="YOUR_DESIRED_URL" -->                                                                            \
-        <input type="text" id="hiddenIID" value="" style="display:none">                                                                                 \
-        <div class="ui search">                                                                                                                          \
-            <input type="text" class="prompt" id="searchID" placeholder="IMDB ID or Title" onfocus="this.placeholder = ''" onblur="this.placeholder = 'IMDB ID or Title'">                             \
-            <div class="results"></div>                                                                                                                  \
-        </div>                                                                                                                                           \
-        <input type="text" id="screensLinks" value="" class="field" placeholder="Screenshot Links" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Screenshot Links'">                     \
-        <input type="text" id="ytLink" value="" class="field" placeholder="Youtube Trailer Link" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Youtube Trailer Link'">                   \
-        <input type="text" id="ddl" value="" class="field" placeholder="Download Link" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Download Link'">                                    \
-        <textarea rows="1" style="width:100%;" class="field" name="mi" id="medianInfo" placeholder="Mediainfo" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Mediainfo'"></textarea>\
-        <span>DownCloud</span>                                                                                                                           \
-        <label class="switch">                                                                                                                           \
-        <input type="checkbox"  id="Downcloud" value="Downcloud" checked></input>                                                                        \
-        <span class="slider round"></span></label>&nbsp;<br></br>                                                                                        \
-        <input type="number" id="HideReactScore" min="0" max="100" value="0"> HideReactScore                                                             \
-        <input type="number" id="HidePosts" min="0" max="50" value="0"> HidePosts<br>                                                                    \
-        <p id="myNumberSum">&nbsp;</p>                                                                                                                   \
-        <button id="gmAddNumsBtn" type="button">Generate Template</button>                                                                               \
-        <div class="divider"/>                                                                                                                           \
-        <button id="gmCloseDlgBtn" type="button">Close Popup</button>                                                                                    \
-    </form>                                                                                                                                              \
-    </div>                                                                                                                                               \
+    $("body").append ( `
+<div id="gmPopupContainer">
+<form>
+<input type="text" id="hiddenIID" value="" style="display:none">
+<div class="ui search">
+<input type="text" class="prompt" id="searchID"placeholder="IMDB ID or Title" onfocus="this.placeholder = ''" onblur="this.placeholder = 'IMDB ID or Title'">
+<div class="results"></div>
+</div>
+<input type="text" id="screensLinks" value="" class="field" placeholder="Screenshot Links" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Screenshot Links'">
+<input type="text" id="ytLink" value="" class="field" placeholder="Youtube Trailer Link" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Youtube Trailer Link'">
+<input type="text" id="ddl" value="" class="field" placeholder="Download Link" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Download Link'">
+<textarea rows="1" style="width:100%;" class="field" id="Media_Info" placeholder="Mediainfo" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Mediainfo'"></textarea>
+<span>DownCloud</span>
+<label class="switch">
+<input type="checkbox" id="Downcloud" value="Downcloud" checked></input>
+<span class="slider round"></span></label>&nbsp;<br></br>
+<input type="number" id="HideReactScore" min="0" max="100" value="0"> HideReactScore
+<input type="number" id="HidePosts" min="0" max="50" value="0"> HidePosts<br>
+<p id="myNumberSum">&nbsp;</p>
+<button id="gmAddNumsBtn" type="button">Generate Template</button>
+<div class="divider"/>
+<button id="gmCloseDlgBtn" type="button">Close Popup</button>
+</form>
+</div>
 ` );
 } else {
-    $("body").append ( `                                                                                                                                 \
-    <div id="gmPopupContainer">                                                                                                                          \
-    <form>                                                                                                                                               \
-        <label>Enter Your OMDB API Key, Then Click On Save :)</label>                                                                                    \
-        <input type="text" id="omdbKey" value="" class="input" placeholder="Omdb API Key">                                                               \
-        <button id="gmAddNumsBtn" onClick="window.location.reload();" type="button">Save Key</button>                                                    \
-        <button id="gmCloseDlgBtn" type="button">Close Popup</button>                                                                                    \
-    </form>                                                                                                                                              \
-    </div>                                                                                                                                               \                                                                                                                                           \
+    $("body").append ( `
+<div id="gmPopupContainer">
+<form>
+<label>Enter Your OMDB API Key, Then Click On Save :)</label>
+<input type="text" id="omdbKey" value="" class="input" placeholder="Omdb API Key">
+<button id="gmAddNumsBtn" onClick="window.location.reload();" type="button">Save Key</button>
+<button id="gmCloseDlgBtn" type="button">Close Popup</button>
+</form>
+</div>
 ` );
 }
+
 GM.getValue("APIKEY", "foo").then(value => {
     const APIKEY = value
-$('.ui.search')
-      .search({
+    $('.ui.search')
+        .search({
         apiSettings: {
-          url: `https://www.omdbapi.com/?apikey=${APIKEY}&r=JSON&s={query}`
+            url: `https://www.omdbapi.com/?apikey=${APIKEY}&r=JSON&s={query}`
         },
         fields: {
-          results : 'Search',
-          title   : 'Title',
+            results : 'Search',
+            title   : 'Title',
+            description : 'Year',
         },
         onSelect: function(response){
             $('#hiddenIID').val(response.imdbID);
         },
         minCharacters : 3
-      })
-//--- Use jQuery to activate the dialog buttons.
-$("#gmAddNumsBtn").click ( function () {
-    var uToob = $("#ytLink").val ();
-    var ddl = $("#ddl").val ();
-    var IID = $("#hiddenIID").val ();
-    var MEDIAINFO = $("#medianInfo").val ();
-    var omdbkey = $("#omdbKey").val ();
-    var screenshots = $("#screensLinks").val ();
-    var hidereactscore = $("#HideReactScore").val ();
-    var hideposts = $("#HidePosts").val ();
-    if (omdbkey) {
-       GM.setValue("APIKEY", omdbkey);
-    }
-    if (Downcloud.checked){
-        ddl = '[DOWNCLOUD]' + ddl + '[/DOWNCLOUD]'
-    }
-    ddl = '[HIDEREACT=1,2,3,4,5,6]' + ddl + '[/HIDEREACT]'
-    if (hidereactscore !== "0"){
-        ddl = `[HIDEREACTSCORE=${hidereactscore}]` + ddl + '[/HIDEREACTSCORE]'
-    }
-    if (hideposts !== "0"){
-        ddl = `[HIDEPOSTS=${hideposts}]` + ddl + '[/HIDEPOSTS]'
-    }
-    if (!IID){
-        IID = $("#searchID").val ();
-    }
-if (screenshots) {
-   screenshots = screenshots.split(" ");
-   var screen = `\n[hr][/hr][indent][size=6][color=rgb(250, 197, 28)][b]Screenshots[/b][/color][/size][/indent]\n [Spoiler='screenshots']`;
-   for (var ss of screenshots) {
-       screen += `[img]${ss}[/img]`;
-   }
-   screen += `[/Spoiler] \n`;
-} else {
-  screen = ""
-}
-if (uToob.match(/[a-z]/)) {
-    var trailer = `\n[hr][/hr][indent][size=6][color=rgb(250, 197, 28)][b]Trailer[/b][/color][/size][/indent]\n ${uToob}`
-} else {
-    trailer = ""
-}
-GM_xmlhttpRequest({
-method: "GET",
-url: `http://www.omdbapi.com/?apikey=${APIKEY}&i=${IID}&plot=full&y&r=json`,
-onload: function(response) {
-var json = JSON.parse(response.responseText);
-    var title = json.Title;
-    var year = json.Year;
-    var rated = json.Rated;
-    var released = json.Released;
-    var runtime = json.Runtime;
-    var genre = json.Genre;
-    var director = json.Director;
-    var writer = json.Writer;
-    var actors = json.Actors;
-    var plot = json.Plot;
-    var poster = json.Poster;
-    var rating = json.imdbRating;
-    var imdb_id = json.imdbID;
-    var imdbvotes = json.imdbVotes;
-    var production = json.Production;
-    var dump = `[center][img] ${poster} [/img]
+    })
+
+    //--- Use jQuery to activate the dialog buttons.
+    $("#gmAddNumsBtn").click ( function () {
+        var omdbkey = $("#omdbKey").val ();
+        var IID = $("#hiddenIID").val ();
+        var screenshots = $("#screensLinks").val ();
+        var uToob = $("#ytLink").val ();
+        var ddl = $("#ddl").val ();
+        var MEDIAINFO = $("#Media_Info").val ();
+        var hidereactscore = $("#HideReactScore").val ();
+        var hideposts = $("#HidePosts").val ();
+        if (APIKEY == "foo") {
+            if (omdbkey) {
+                GM.setValue("APIKEY", omdbkey);
+            } else {
+                alert("You Didn't Enter Your Key!!")
+            }
+        } else {
+            if (!IID){
+                IID = $("#searchID").val ();
+            }
+            if (!IID) {
+                alert("You Didn't Select A Title or Enter a IMDB ID!");
+            } else if (!ddl) {
+                alert("Uh Oh! You Forgot Your Download Link! That's Pretty Important...");
+            } else if (!MEDIAINFO){
+                alert("You Don't Have Any Mediainfo? It's Required!");
+            } else {
+                if (Downcloud.checked){
+                    ddl = '[DOWNCLOUD]' + ddl + '[/DOWNCLOUD]'
+                }
+                ddl = '[HIDEREACT=1,2,3,4,5,6]' + ddl + '[/HIDEREACT]'
+                if (hidereactscore !== "0"){
+                    ddl = `[HIDEREACTSCORE=${hidereactscore}]` + ddl + '[/HIDEREACTSCORE]'
+                }
+                if (hideposts !== "0"){
+                    ddl = `[HIDEPOSTS=${hideposts}]` + ddl + '[/HIDEPOSTS]'
+                }
+                if (screenshots) {
+                    screenshots = screenshots.split(" ");
+                    var screen = `\n[hr][/hr][indent][size=6][color=rgb(250, 197, 28)][b]Screenshots[/b][/color][/size][/indent]\n [Spoiler='screenshots']`;
+                    for (var ss of screenshots) {
+                        screen += `[img]${ss}[/img]`;
+                    }
+                    screen += `[/Spoiler] \n`;
+                } else {
+                    screen = ""
+                }
+                if (uToob.match(/[a-z]/)) {
+                    var trailer = `\n[hr][/hr][indent][size=6][color=rgb(250, 197, 28)][b]Trailer[/b][/color][/size][/indent]\n ${uToob}`
+                    } else {
+                        trailer = ""
+                    }
+                GM_xmlhttpRequest({
+                    method: "GET",
+                    url: `http://www.omdbapi.com/?apikey=${APIKEY}&i=${IID}&plot=full&y&r=json`,
+                    onload: function(response) {
+                        var json = JSON.parse(response.responseText);
+                        var title = json.Title;
+                        var year = json.Year;
+                        var rated = json.Rated;
+                        var released = json.Released;
+                        var runtime = json.Runtime;
+                        var genre = json.Genre;
+                        var director = json.Director;
+                        var writer = json.Writer;
+                        var actors = json.Actors;
+                        var plot = json.Plot;
+                        var poster = json.Poster;
+                        var rating = json.imdbRating;
+                        var imdb_id = json.imdbID;
+                        var imdbvotes = json.imdbVotes;
+                        var production = json.Production;
+                        var dump = `[center][img] ${poster} [/img]
 [color=rgb(250, 197, 28)][b][size=6] ${title} (${year})[/size][/b][/color]
 [url=https://www.imdb.com/title/${imdb_id}][img]https://i.imgur.com/rcSipDw.png[/img][/url][size=6][b] ${rating}[/b]/10[/size]
 [size=6][img]https://i.imgur.com/sEpKj3O.png[/img]${imdbvotes}[/size][/center]
@@ -173,22 +187,18 @@ var json = JSON.parse(response.responseText);
 [*][B]Production: [/B] ${production} [/LIST]
 [hr][/hr][indent][size=6][color=rgb(250, 197, 28)][b]Media Info[/b][/color][/size][/indent]\n
 [spoiler='Click here to view Media Info']\n ${MEDIAINFO} \n[/spoiler]
-[hr][/hr][center][size=6][color=rgb(250, 197, 28)][b]Download Link[/b][/color][/size]\n
-${ddl}[/center]`;
-    if (!title){
-        alert("You Didn't Select A Title or Enter a IMDB ID!");
-    } else {
-        GM_setClipboard (dump);
-        $(`#myNumberSum`).text (`Copied! Just paste on Blackpearl.biz`);
-        document.getElementsByName("message")[0].value = dump;
-        document.getElementById("title").value = `${title} (${year})`;
-    }
-}})});;})
-
-$("#gmCloseDlgBtn").click ( function () {
-    $("#gmPopupContainer").hide ();
-} );
-
+[hr][/hr][center][size=6][color=rgb(250, 197, 28)][b]Download Link[/b][/color][/size][/center]\n
+[center]${ddl}[/center]`;
+                        GM_setClipboard (dump);
+                        $(`#myNumberSum`).text (`Copied! Just paste on Blackpearl.biz`);
+                        document.getElementsByName("message")[0].value = dump;
+                        document.getElementById("title").value = `${title} (${year})`;
+                    }
+                })
+            }
+        }
+    });
+});
 
 //--- CSS styles make it work...
 GM_addStyle ( "                                                   \
