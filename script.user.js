@@ -1,37 +1,10 @@
 // ==UserScript==
 // @name        Blackpearl IMDB
-// @version     2.2.0
+// @version     2.3.1
 // @description Template Maker
 // @author      NotLaxudope
 // @icon        https://blackpearl.biz/favicon.png
-// @include     https://blackpearl.biz/forums/129/post-thread
-// @include     https://blackpearl.biz/forums/172/post-thread
-// @include     https://blackpearl.biz/forums/173/post-thread
-// @include     https://blackpearl.biz/forums/174/post-thread
-// @include     https://blackpearl.biz/forums/175/post-thread
-// @include     https://blackpearl.biz/forums/176/post-thread
-// @include     https://blackpearl.biz/forums/178/post-thread
-// @include     https://blackpearl.biz/forums/179/post-thread
-// @include     https://blackpearl.biz/forums/180/post-thread
-// @include     https://blackpearl.biz/forums/181/post-thread
-// @include     https://blackpearl.biz/forums/182/post-thread
-// @include     https://blackpearl.biz/forums/183/post-thread
-// @include     https://blackpearl.biz/forums/184/post-thread
-// @include     https://blackpearl.biz/forums/187/post-thread
-// @include     https://blackpearl.biz/forums/188/post-thread
-// @include     https://blackpearl.biz/forums/189/post-thread
-// @include     https://blackpearl.biz/forums/190/post-thread
-// @include     https://blackpearl.biz/forums/193/post-thread
-// @include     https://blackpearl.biz/forums/194/post-thread
-// @include     https://blackpearl.biz/forums/197/post-thread
-// @include     https://blackpearl.biz/forums/198/post-thread
-// @include     https://blackpearl.biz/forums/199/post-thread
-// @include     https://blackpearl.biz/forums/200/post-thread
-// @include     https://blackpearl.biz/forums/203/post-thread
-// @include     https://blackpearl.biz/forums/204/post-thread
-// @include     https://blackpearl.biz/forums/206/post-thread
-// @include     https://blackpearl.biz/forums/208/post-thread
-// @include     https://blackpearl.biz/forums/223/post-thread
+// @include     /^https:\/\/blackpearl\.biz\/forums\/(129|172|173|174|175|176|178|179|180|181|182|183|184|187|188|189|190|193|194|197|198|199|200|203|204|206|208|223)\/post-thread/
 // @require     https://code.jquery.com/jquery-3.4.1.min.js
 // @require     https://raw.githubusercontent.com/Semantic-Org/UI-Search/master/search.js
 // @require     https://raw.githubusercontent.com/Semantic-Org/UI-Api/master/api.js

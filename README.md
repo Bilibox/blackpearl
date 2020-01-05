@@ -2,7 +2,7 @@
 # Blackpearl OMDB Template Generator
 OMDB Thread Template Generator userscript
 <!-- keep image height ~ 500px -->
-![](https://i.imgur.com/GzfLZvk.png)
+![](https://i.imgur.com/hX7XFVC.png)
 
 ## Requirements:
 A userscript manager + installing the script
@@ -22,6 +22,7 @@ First you'll want to navigate to the one of the Movie or TV Show sections and st
 There are two ways of using the IMDB field. You can start typing the name of the Movie or Show and this will present you with a list to choose from. Simply click the correct one and move to the next step. If you are having trouble finding the movie you want I recommend using the IMDB ID method below.
 
 The other method is using the IMDB ID. This starts with "tt" and has numbers after it. For example Avengers: Endgame (2019) https://www.imdb.com/title/tt4154796/ the IMDB ID would be tt4154796. So I would enter tt4154796 into the field and go to the next step.
+You may also paste the link itself into the IMDB field. For example: https://www.imdb.com/title/tt4154796/ then I would continue to the next step.
 
 
 ### 3.
