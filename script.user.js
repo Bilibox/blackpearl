@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Blackpearl IMDB
-// @version     2.1.2
+// @version     2.1.3
 // @description Template Maker
 // @author      NotLaxudope
 // @include     https://blackpearl.biz/forums/129/post-thread
@@ -118,6 +118,9 @@ GM.getValue("APIKEY", "foo").then(value => {
         } else {
             if (!IID){
                 IID = $("#searchID").val ();
+                if (IID.includes("imdb")) {
+                    IID = IID.match(/tt\d+/)[0];
+                }
             }
             if (!IID) {
                 alert("You Didn't Select A Title or Enter a IMDB ID!");
