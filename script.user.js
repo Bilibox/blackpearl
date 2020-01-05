@@ -1,8 +1,9 @@
 // ==UserScript==
 // @name        Blackpearl IMDB
-// @version     2.1.3
+// @version     2.2.0
 // @description Template Maker
 // @author      NotLaxudope
+// @icon        https://blackpearl.biz/favicon.png
 // @include     https://blackpearl.biz/forums/129/post-thread
 // @include     https://blackpearl.biz/forums/172/post-thread
 // @include     https://blackpearl.biz/forums/173/post-thread
@@ -26,6 +27,7 @@
 // @include     https://blackpearl.biz/forums/198/post-thread
 // @include     https://blackpearl.biz/forums/199/post-thread
 // @include     https://blackpearl.biz/forums/200/post-thread
+// @include     https://blackpearl.biz/forums/203/post-thread
 // @include     https://blackpearl.biz/forums/204/post-thread
 // @include     https://blackpearl.biz/forums/206/post-thread
 // @include     https://blackpearl.biz/forums/208/post-thread
@@ -41,14 +43,13 @@
 // @grant       GM.getValue
 // ==/UserScript==
 
-GM.getValue("APIKEY", "foo").then(value => { const APIVALUE = value
-if (APIVALUE !== 'foo'){
-    $("body").append ( `
+var Generate_Template = `
 <div id="gmPopupContainer">
+<a href='javascript:void(0)' onclick='$("#gmPopupContainer").hide ();' class="close"></a>
 <form>
 <input type="text" id="hiddenIID" value="" style="display:none">
 <div class="ui search">
-<input type="text" class="prompt" id="searchID"placeholder="IMDB ID or Title" onfocus="this.placeholder = ''" onblur="this.placeholder = 'IMDB ID or Title'">
+<input type="text" class="prompt" id="searchID" placeholder="IMDB ID or Title" onfocus="this.placeholder = ''" onblur="this.placeholder = 'IMDB ID or Title'">
 <div class="results"></div>
 </div>
 <input type="text" id="screensLinks" value="" class="field" placeholder="Screenshot Links" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Screenshot Links'">
@@ -64,21 +65,27 @@ if (APIVALUE !== 'foo'){
 <p id="myNumberSum">&nbsp;</p>
 <button id="gmAddNumsBtn" type="button">Generate Template</button>
 <div class="divider"/>
-<button id="gmCloseDlgBtn" type="button">Close Popup</button>
+<button id="gmClearBtn" type="reset">Clear</button>
 </form>
 </div>
-` );
-} else {
-    $("body").append ( `
+`
+var omdbinput = `
 <div id="gmPopupContainer">
+<a href='#' onclick='$("#gmPopupContainer").hide ();' class="close"></a>
 <form>
 <label>Enter Your OMDB API Key, Then Click On Save :)</label>
 <input type="text" id="omdbKey" value="" class="input" placeholder="Omdb API Key">
 <button id="gmAddNumsBtn" onClick="window.location.reload();" type="button">Save Key</button>
-<button id="gmCloseDlgBtn" type="button">Close Popup</button>
+<button id="gmClearBtn" type="reset">Clear</button>
 </form>
 </div>
-` );
+`
+
+GM.getValue("APIKEY", "foo").then(value => { const APIVALUE = value
+if (APIVALUE !== 'foo'){
+    $("body").append (Generate_Template);
+} else {
+    $("body").append (omdbinput);
 }
 
 GM.getValue("APIKEY", "foo").then(value => {
@@ -159,43 +166,93 @@ GM.getValue("APIKEY", "foo").then(value => {
                     url: `http://www.omdbapi.com/?apikey=${APIKEY}&i=${IID}&plot=full&y&r=json`,
                     onload: function(response) {
                         var json = JSON.parse(response.responseText);
-                        var title = json.Title;
-                        var year = json.Year;
-                        var rated = json.Rated;
-                        var released = json.Released;
-                        var runtime = json.Runtime;
-                        var genre = json.Genre;
-                        var director = json.Director;
-                        var writer = json.Writer;
-                        var actors = json.Actors;
-                        var plot = json.Plot;
-                        var poster = json.Poster;
-                        var rating = json.imdbRating;
-                        var imdb_id = json.imdbID;
-                        var imdbvotes = json.imdbVotes;
-                        var production = json.Production;
-                        var dump = `[center][img] ${poster} [/img]
-[color=rgb(250, 197, 28)][b][size=6] ${title} (${year})[/size][/b][/color]
-[url=https://www.imdb.com/title/${imdb_id}][img]https://i.imgur.com/rcSipDw.png[/img][/url][size=6][b] ${rating}[/b]/10[/size]
-[size=6][img]https://i.imgur.com/sEpKj3O.png[/img]${imdbvotes}[/size][/center]
-[hr][/hr][indent][size=6][color=rgb(250, 197, 28)][b]Plot[/b][/color][/size][/indent]\n\n ${plot}${trailer}${screen}
-[hr][/hr][indent][size=6][color=rgb(250, 197, 28)][b]Movie Info[/b][/color][/size][/indent]\n
-[LIST][*][B]Rating: [/B]${rated}
-[*][B]Genre: [/B] ${genre}
-[*][B]Directed By: [/B] ${director}
-[*][B]Written By: [/B] ${writer}
-[*][B]Starring: [/B] ${actors}
-[*][B]Release Date: [/B] ${released}
-[*][B]Runtime: [/B] ${runtime}
-[*][B]Production: [/B] ${production} [/LIST]
-[hr][/hr][indent][size=6][color=rgb(250, 197, 28)][b]Media Info[/b][/color][/size][/indent]\n
-[spoiler='Click here to view Media Info']\n ${MEDIAINFO} \n[/spoiler]
-[hr][/hr][center][size=6][color=rgb(250, 197, 28)][b]Download Link[/b][/color][/size][/center]\n
-[center]${ddl}[/center]`;
+                        if (json.Poster && json.Poster !== "N/A"){
+                            var poster = "[center][img] " + json.Poster + " [/img]\n";
+                        } else {
+                            poster = ''
+                        }
+                        if (json.Title && json.Title !== "N/A"){
+                            var title = "[color=rgb(250, 197, 28)][b][size=6] " + json.Title;
+                        } else {
+                            alert("You Messed Up! Check That You've Entered Something Into The IMDB Field!")
+                        }
+                        if (json.Year && json.Year !== "N/A"){
+                            var year = json.Year + ")[/size][/b][/color]\n";
+                        } else {
+                            year = ''
+                        }
+                        if (json.imdbID && json.imdbID !== "N/A"){
+                            var imdb_id = "[url=https://www.imdb.com/title/" + json.imdbID + "][img]https://i.imgur.com/rcSipDw.png[/img][/url]";;
+                        } else {
+                            imdb_id = ''
+                        }
+                        if (json.imdbRating && json.imdbRating !== "N/A"){
+                            var rating = "[size=6][b]" + json.imdbRating + "[/b]/10[/size]\n";
+                        } else {
+                            rating = ''
+                        }
+                        if (json.imdbVotes && json.imdbVotes !== "N/A"){
+                            var imdbvotes = "[size=6][img]https://i.imgur.com/sEpKj3O.png[/img]" + json.imdbVotes + "[/size][/center]\n";
+                        } else {
+                            imdbvotes = ''
+                        }
+                        if (json.Plot && json.Plot !== "N/A"){
+                            var plot = "[hr][/hr][indent][size=6][color=rgb(250, 197, 28)][b]Plot[/b][/color][/size][/indent]\n\n " + json.Plot;
+                        } else {
+                            plot = ''
+                        }
+                        if (json.Rated && json.Rated !== "N/A"){
+                            var rated = "[B]Rating: [/B]" + json.Rated + "\n";
+                        } else {
+                            rated = ''
+                        }
+                        if (json.Genre && json.Genre !== "N/A"){
+                            var genre = "[*][B]Genre: [/B] " + json.Genre + "\n";
+                        } else {
+                            genre = ''
+                        }
+                        if (json.Director && json.Director !== "N/A"){
+                            var director = "[*][B]Directed By: [/B] " + json.Director + "\n";
+                        } else {
+                            director = ''
+                        }
+                        if (json.Writer && json.Writer !== "N/A"){
+                            var writer = "[*][B]Written By: [/B] " + json.Writer + "\n";
+                        } else {
+                            writer = ''
+                        }
+                        if (json.Actors && json.Actors !== "N/A"){
+                            var actors = "[*][B]Starring: [/B] " + json.Actors + "\n";
+                        } else {
+                            actors = ''
+                        }
+                        if (json.Released && json.Released !== "N/A"){
+                            var released = "[*][B]Release Date: [/B] " + json.Released + "\n";
+                        } else {
+                            released = ''
+                        }
+                        if (json.Runtime && json.Runtime !== "N/A"){
+                            var runtime = "[*][B]Runtime: [/B] " + json.Runtime + "\n";
+                        } else {
+                            runtime = ''
+                        }
+                        if (json.Production && json.Production !== "N/A"){
+                            var production = "[*][B]Production: [/B] " + json.Production + "\n";
+                        } else {
+                            production = ''
+                        }
+                        MEDIAINFO = "[hr][/hr][indent][size=6][color=rgb(250, 197, 28)][b]Media Info[/b][/color][/size][/indent]\n [spoiler='Click here to view Media Info']\n " + MEDIAINFO + "\n[/spoiler]\n"
+                        ddl = "[hr][/hr][center][size=6][color=rgb(250, 197, 28)][b]Download Link[/b][/color][/size]\n" + ddl + "\n[/center]"
+                        var dump = `${poster}${title} (${year}${imdb_id} ${rating}${imdbvotes}${plot}${trailer}${screen}
+[hr][/hr][indent][size=6][color=rgb(250, 197, 28)][b]Movie Info[/b][/color][/size][/indent]
+[LIST][*]${rated}${genre}${director}${writer}${actors}${released}${runtime}${production}[/LIST]\n${MEDIAINFO}${ddl}`;
                         GM_setClipboard (dump);
                         $(`#myNumberSum`).text (`Copied! Just paste on Blackpearl.biz`);
                         document.getElementsByName("message")[0].value = dump;
-                        document.getElementById("title").value = `${title} (${year})`;
+                        var xf_title_value = document.getElementById("title").value
+                        if (!xf_title_value){
+                            xf_title_value = json.Title + "(" + json.Year + ")";
+                        }
                     }
                 })
             }
@@ -203,9 +260,11 @@ GM.getValue("APIKEY", "foo").then(value => {
     });
 });
 
-$("#gmCloseDlgBtn").click ( function () {
-    $("#gmPopupContainer").hide ();
-});
+$(document).on('keydown', function(event) {
+       if (event.key == "Escape") {
+           $("#gmPopupContainer").hide ();
+       }
+   });
 
 //--- CSS styles make it work...
 GM_addStyle ( "                                                   \
@@ -297,10 +356,6 @@ GM_addStyle ( "                                                   \
             color:                  white;                        \
       }                                                           \
       /* Start Rounded sliders Checkboxes */                      \
-      p {                                                         \
-            margin-top:             5px;                          \
-            margin-bottom:          5px;                          \
-      }                                                           \
       .switch {                                                   \
             position:               relative;                     \
             display:                inline-block;                 \
@@ -352,6 +407,29 @@ GM_addStyle ( "                                                   \
             border-radius:          50%;                          \
       }                                                           \
       /* End Rounded sliders Checkboxes */                        \
+      .close {                                                    \
+            position:               absolute;                     \
+            right:                  26px;                         \
+            top:                    4px;                          \
+            opacity:                0.5;                          \
+      }                                                           \
+      .close:hover {                                              \
+            opacity:                1;                            \
+      }                                                           \
+      .close:before, .close:after {                               \
+            position:               absolute;                     \
+            left:                   15px;                         \
+            content:                ' ';                          \
+            height:                 15px;                         \
+            width:                  2.5px;                        \
+            background-color:       #4caf50;                      \
+      }                                                           \
+      .close:before {                                             \
+            transform:              rotate(45deg);                \
+      }                                                           \
+      .close:after {                                              \
+            transform:              rotate(-45deg);               \
+      }                                                           \
 }                                                                 \
     @media screen and (min-width: 768px) {                        \
       #gmPopupContainer {                                         \
@@ -437,10 +515,6 @@ GM_addStyle ( "                                                   \
             background:             transparent;                  \
             color:                  white;                        \
       }                                                           \
-      p {                                                         \
-            margin-top:             5px;                          \
-            margin-bottom:          5px;                          \
-      }                                                           \
       .switch {                                                   \
             position:               relative;                     \
             display:                inline-block;                 \
@@ -491,6 +565,29 @@ GM_addStyle ( "                                                   \
       }                                                           \
       .slider.round:before {                                      \
             border-radius:          50%;                          \
+      }                                                           \
+      .close {                                                    \
+            position:               absolute;                     \
+            right:                  30px;                         \
+            top:                    6px;                          \
+            opacity:                0.5;                          \
+      }                                                           \
+      .close:hover {                                              \
+            opacity:                1;                            \
+      }                                                           \
+      .close:before, .close:after {                               \
+            position:               absolute;                     \
+            left:                   15px;                         \
+            content:                ' ';                          \
+            height:                 20px;                         \
+            width:                  3.5px;                        \
+            background-color:       #4caf50;                      \
+      }                                                           \
+      .close:before {                                             \
+            transform:              rotate(45deg);                \
+      }                                                           \
+      .close:after {                                              \
+            transform:              rotate(-45deg);               \
       }                                                           \
 }                                                                 \
 ")});
