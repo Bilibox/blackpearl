@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Blackpearl IMDB
-// @version     2.3.1
+// @version     2.4.0
 // @description Template Maker
 // @author      NotLaxudope
 // @icon        https://blackpearl.biz/favicon.png
@@ -65,13 +65,40 @@ GM.getValue("APIKEY", "foo").then(value => {
     const APIKEY = value
     $('.ui.search')
         .search({
+        type          : 'category',
         apiSettings: {
-            url: `https://www.omdbapi.com/?apikey=${APIKEY}&r=JSON&s={query}`
+            url: `https://www.omdbapi.com/?apikey=${APIKEY}&r=JSON&s={query}`,
+            onResponse : function(myfunc) {
+                var
+                    response = {
+                        results : {}
+                    };
+                $.each(myfunc.Search, function(index, item) {
+                    var
+                        category   = item.Type.toUpperCase() || 'Unknown',
+                        maxResults = 10;
+                    if(index >= maxResults) {
+                        return false;
+                    }
+                    if(response.results[category] === undefined) {
+                        response.results[category] = {
+                            name    : "~~~~~~~~~~"+category+"~~~~~~~~~~",
+                            results : []
+                        };
+                    }
+                    var Name = item.Title +" ("+ item.Year+")";
+                    response.results[category].results.push({
+                        title       : Name,
+                        description : Name,
+                        imdbID      : item.imdbID
+                    });
+                });
+                return response;
+          }
         },
         fields: {
-            results : 'Search',
-            title   : 'Title',
-            description : 'Year',
+          results : 'results',
+          title   : 'name',
         },
         onSelect: function(response){
             $('#hiddenIID').val(response.imdbID);
@@ -222,9 +249,9 @@ GM.getValue("APIKEY", "foo").then(value => {
                         GM_setClipboard (dump);
                         $(`#myNumberSum`).text (`Copied! Just paste on Blackpearl.biz`);
                         document.getElementsByName("message")[0].value = dump;
-                        var xf_title_value = document.getElementById("title").value
+                        var xf_title_value = document.getElementById("title").value;
                         if (!xf_title_value){
-                            xf_title_value = json.Title + "(" + json.Year + ")";
+                            document.getElementById("title").value = json.Title + " (" + json.Year + ")";
                         }
                     }
                 })
