@@ -102,6 +102,7 @@ GM.getValue("APIKEY", "foo").then(value => {
         },
         onSelect: function(response){
             $('#hiddenIID').val(response.imdbID);
+            $('#searchID').val(response.title);
         },
         minCharacters : 3
     })
