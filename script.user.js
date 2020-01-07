@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Blackpearl IMDB
-// @version     2.4.0
+// @version     2.4.1
 // @description Template Maker
 // @author      NotLaxudope
 // @icon        https://blackpearl.biz/favicon.png
@@ -85,8 +85,8 @@ GM.getValue("APIKEY", "foo").then(value => {
                 };
                 $.each(myfunc.Search, function(index, item) {
                     var
-                    category   = item.Type.toUpperCase() || 'Unknown',
-                        maxResults = 10;
+                    category = item.Type.toUpperCase() || 'Unknown',
+                    maxResults = 10;
                     if(index >= maxResults) {
                         return false;
                     }
